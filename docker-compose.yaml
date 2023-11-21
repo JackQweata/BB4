@@ -1,0 +1,63 @@
+version: '3'
+
+services:
+
+  app:
+    build: .
+    tty: true
+    command: python3 main.py
+    volumes:
+      - .:/code
+    env_file: .env
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=parser_bb4
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=examplepassword
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - pg_data:/var/lib/postgresql/data/pgdata
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d parser_bb4" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+      image: redis
+      ports:
+        - '6379:6379'
+      healthcheck:
+        test: [ "CMD-SHELL", "redis-cli ping" ]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+
+  celery:
+    build: .
+    env_file: .env
+    tty: true
+    command: celery -A scheduled_task beat -l INFO
+    depends_on:
+      - app
+      - redis
+
+  worker:
+    build: .
+    tty: true
+    command: celery -A tasks worker -l INFO
+    depends_on:
+      - app
+      - redis
+
+volumes:
+  pg_data:

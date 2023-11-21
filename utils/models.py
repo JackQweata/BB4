@@ -2,6 +2,7 @@ from sqlalchemy import create_engine, Column, Integer, ForeignKey, String, Table
 from sqlalchemy.orm import sessionmaker, relationship, declarative_base
 import config
 
+
 engine = create_engine(config.BD_CONNECT)
 
 Session = sessionmaker(bind=engine)

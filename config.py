@@ -8,7 +8,8 @@ dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path=dotenv_path)
 
 
-BD_CONNECT = f'postgresql://{os.getenv("BD_USER")}:{os.getenv("BD_PASS")}@localhost/{os.getenv("BD_NAME")}'
+BD_CONNECT = (f'postgresql://{os.getenv("BD_USER")}:{os.getenv("BD_PASS")}@'
+              f'{os.getenv("BD_HOST")}:{os.getenv("BD_PORT")}/{os.getenv("BD_NAME")}')
 
 SITE_DOMAIN = "https://codeforces.com/"
 
