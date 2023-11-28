@@ -14,8 +14,6 @@ from utils.models import session, User, Complexity, TopicProblems
 async def start_telegram_bot() -> None:
     """ Запуск бота telegram """
 
-    logging.basicConfig(level=logging.INFO)
-
     bot = Bot(token=config.BOT_TOKEN)
     dp = Dispatcher()
 

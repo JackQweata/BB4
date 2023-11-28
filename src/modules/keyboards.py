@@ -54,10 +54,10 @@ def get_keyboard_main_filter() -> Any:
     return filter_settings_bt.as_markup()
 
 
-def get_keyboard_settings_filter(user_id, ratings_bd, type_filter: str) -> Any:
+def get_keyboard_settings_filter(user_id: int, filters_bd: list, type_filter: str) -> Any:
     """ Инлайн кнопки с выбором фильтров """
 
-    slice_list = [ratings_bd[i:i + 10] for i in range(0, len(ratings_bd), 10)]
+    slice_list = [filters_bd[i:i + 10] for i in range(0, len(filters_bd), 10)]
     builder = InlineKeyboardBuilder()
 
     if type_filter not in server_data:
